@@ -1,8 +1,11 @@
 // app.js (front-end)
 const decodeButton = document.getElementById("decodeButton");
-const copyButton = document.getElementById("copyButton");
+const copyLink = document.getElementById("copyLink");
 const decodedData = document.getElementById("decodedData");
 const imageInput = document.getElementById("imageInput");
+const makrButton = document.getElementById("makrButton");
+const qrtext = document.getElementById("qrtext");
+const img = document.getElementById("img");
 
 decodeButton.addEventListener("click", () => {
   const formData = new FormData();
@@ -22,22 +25,22 @@ decodeButton.addEventListener("click", () => {
     });
 });
 
-copyButton.addEventListener("click", () => {
+copyLink.addEventListener("click", () => {
   const textToCopy = decodedData.textContent.replace("Decoded Data: ", "");
+  navigator.clipboard.writeText(textToCopy);
+  alert("Copied");
+});
 
-  fetch("/copy", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ textToCopy }),
+makrButton.addEventListener("click", () => {
+  console.log(qrtext.value);
+  fetch('/gen?value='+qrtext.value)
+  .then(response => response.text())
+  .then(data => {
+    img.src = data;
+    img.alt = 'Fetched Image';
   })
-    .then((response) => response.text())
-    .then(() => {
-      alert("Text copied to clipboard.");
-    })
-    .catch((error) => {
-      console.error(error);
-      alert("Error copying text to clipboard.");
-    });
+  .catch(error => {
+    console.error('Error fetching image:', error);
+  });
+  
 });

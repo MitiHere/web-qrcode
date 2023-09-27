@@ -1,13 +1,11 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
-const Jimp = require("jimp");
-const fs = require("fs");
-const qrCodeReader = require("qrcode-reader");
-const clipboardy = import("clipboardy");
+const sharp = require("sharp");
+const jsQR = require("jsqr");
 const app = express();
 const port = 3000;
+var QRCode = require('qrcode')
 
-app.use(fileUpload());
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -28,31 +26,24 @@ app.post("/decode", async (req, res) => {
     return res.status(400).send("No file uploaded.");
   }
   const imgPath = req.files.image.tempFilePath;
-
-  const buffer = fs.readFileSync(imgPath);
-  Jimp.read(buffer, function (err, image) {
-    if (err) {
-      console.error(err);
-      // TODO handle error
-    }
-    const qr = new QrCode();
-    qr.callback = function (err, value) {
-      if (err) {
-        console.error(err);
-        // TODO handle error
-      }
-      console.log(value.result);
-      console.log(value);
-    };
-    qr.decode(image.bitmap);
-  });
+    const buff = await sharp(imgPath)
+    .ensureAlpha()
+    .raw()
+    .toBuffer();
+    const size = await sharp(imgPath).toBuffer({ resolveWithObject: true });
+  const code = jsQR(Uint8ClampedArray.from(buff), size.info.width, size.info.height);
+  if (code) {
+    res.json({decodedData:code.data});
+  }else{
+    return res.status(500).send('Error decoding QR code.');
+  }
 });
 
-app.post("/copy", (req, res) => {
-  const textToCopy = req.body.textToCopy;
-  clipboardy.writeSync(textToCopy);
-  res.send("Text copied to clipboard.");
-});
+app.get("/gen",async(req,res)=>{
+  QRCode.toDataURL(req.query.value, function (err, url) {
+    res.send(url);
+  })
+})
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
