@@ -26,12 +26,8 @@ app.post("/decode", async (req, res) => {
     return res.status(400).send("No file uploaded.");
   }
   const imgPath = req.files.image.tempFilePath;
-    const buff = await sharp(imgPath)
-    .ensureAlpha()
-    .raw()
-    .toBuffer();
-    const size = await sharp(imgPath).toBuffer({ resolveWithObject: true });
-  const code = jsQR(Uint8ClampedArray.from(buff), size.info.width, size.info.height);
+  const sharpImg = await sharp(imgPath).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const code = jsQR(Uint8ClampedArray.from(sharpImg.data), sharpImg.info.width, sharpImg.info.height);
   if (code) {
     res.json({decodedData:code.data});
   }else{
