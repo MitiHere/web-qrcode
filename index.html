@@ -1,22 +1,56 @@
 <!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>QR Code Decoder</title>
+
 </head>
+
 <body>
-    <h1>QR Code Decoder</h1>
-    <input type="file" id="imageInput">
-    <button id="decodeButton">Decode</button>
-    <div id="decodedData"></div>
-    <button id="copyLink">Copy to Clipboard</button>
-    <br><br><br><br><br><br><br>
-    <h1>QR Code Maker</h1>
-    <input type="text" id="qrtext">
-    <button id="makrButton">CreateQr</button>
-    <div id="createdImage"></div>
-    <img id="img"></img>
+    <ul class="nav nav-pills mb-2 justify-content-center" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-maker-tab" data-bs-toggle="pill" data-bs-target="#pills-maker"
+                type="button" role="tab" aria-controls="pills-maker" aria-selected="true">Qr Code Maker</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-decoder-tab" data-bs-toggle="pill" data-bs-target="#pills-decoder"
+                type="button" role="tab" aria-controls="pills-decoder" aria-selected="false">Qr Code Decoder</button>
+        </li>
+    </ul>
+    <div class="tab-content " id="pills-tabContent">
+        <div class="d-flex justify-content-center">
+            <div class="tab-pane fade show active" id="pills-maker" role="tabpanel" aria-labelledby="pills-maker-tab">
+                <h1>QR Code Maker</h1>
+                <div class="mb-3">
+                    <input type="text" id="qrtext">
+                    <button class="btn btn-primary" id="makrButton">CreateQr</button>
+                    <div id="createdImage"></div>
+                    <img id="img"></img>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="tab-pane fade" id="pills-decoder" role="tabpanel" aria-labelledby="pills-decoder-tab">
+
+                <h1>QR Code Decoder</h1>
+                <input class=" d-inline-flex form-control" type="file" id="imageInput">
+                <button class="btn btn-primary" id="decodeButton">Decode</button>
+                <div id="decodedData"></div>
+                <button class="btn btn-primary" id="copyLink">Copy to Clipboard</button>
+
+            </div>
+
+
+        </div>
+
+
 
 </body>
 <script src="/client.js"></script>
