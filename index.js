@@ -1,12 +1,19 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
 const Jimp = require("jimp");
+const fs = require("fs");
 const qrCodeReader = require("qrcode-reader");
 const clipboardy = import("clipboardy");
 const app = express();
 const port = 3000;
 
 app.use(fileUpload());
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 
 app.get("/client.js", (req, res) => {
   res.sendFile(__dirname + "/public/client.js");
@@ -20,27 +27,24 @@ app.post("/decode", async (req, res) => {
   if (!req.files || !req.files.image) {
     return res.status(400).send("No file uploaded.");
   }
-  const img = req.files.image;
+  const imgPath = req.files.image.tempFilePath;
 
-  Jimp.read(img, function (err, image) {
+  const buffer = fs.readFileSync(imgPath);
+  Jimp.read(buffer, function (err, image) {
     if (err) {
       console.error(err);
-      res.status(500).send("Error processing image.");
+      // TODO handle error
     }
-    // __ Creating an instance of qrcode-reader __ \\
-
-    const qrCodeInstance = new qrCodeReader();
-
-    qrCodeInstance.callback = function (err, value) {
+    const qr = new QrCode();
+    qr.callback = function (err, value) {
       if (err) {
         console.error(err);
+        // TODO handle error
       }
-      // __ Printing the decrypted value __ \\
-      res.json({ decodedData: qrCode.data });
+      console.log(value.result);
+      console.log(value);
     };
-
-    // __ Decoding the QR code __ \\
-    qrCodeInstance.decode(image.bitmap);
+    qr.decode(image.bitmap);
   });
 });
 
