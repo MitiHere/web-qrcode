@@ -18,6 +18,7 @@ decodeButton.addEventListener("click", () => {
     .then((response) => response.json())
     .then((data) => {
       decodedData.textContent = `Decoded Data: ${data.decodedData}`;
+      copyLink.hidden = false;
     })
     .catch((error) => {
       console.error(error);
@@ -33,14 +34,13 @@ copyLink.addEventListener("click", () => {
 
 makrButton.addEventListener("click", () => {
   console.log(qrtext.value);
-  fetch('/gen?value='+qrtext.value)
-  .then(response => response.text())
-  .then(data => {
-    img.src = data;
-    img.alt = 'Fetched Image';
-  })
-  .catch(error => {
-    console.error('Error fetching image:', error);
-  });
-  
+  fetch("/gen?value=" + qrtext.value)
+    .then((response) => response.text())
+    .then((data) => {
+      img.src = data;
+      img.alt = "Fetched Image";
+    })
+    .catch((error) => {
+      console.error("Error fetching image:", error);
+    });
 });
