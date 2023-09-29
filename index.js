@@ -3,7 +3,6 @@ const fileUpload = require("express-fileupload");
 const sharp = require("sharp");
 const jsQR = require("jsqr");
 const app = express();
-const cors = require("cors");
 const port = 3000;
 const QRCode = require("qrcode");
 
@@ -13,19 +12,6 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
-
-// Allow specific origins
-const allowedOrigins = ["http://always.ceyraud.com", "http://file.ceyraud.com"];
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
 
 app.use(cors(corsOptions));
 
