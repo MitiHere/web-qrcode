@@ -15,7 +15,7 @@ app.use(
 );
 
 const corsOptions = {
-  origin: "https://file.ceyraud.com", // Replace with the actual URL of 'file.ceyraud.com'
+  origin: "https://always.ceyraud.com/", // Replace with the actual URL of 'file.ceyraud.com'
 };
 app.use(cors(corsOptions));
 
