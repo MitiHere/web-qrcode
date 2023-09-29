@@ -4,7 +4,7 @@ const sharp = require("sharp");
 const jsQR = require("jsqr");
 const app = express();
 const port = 3000;
-var QRCode = require('qrcode')
+var QRCode = require("qrcode");
 
 app.use(
   fileUpload({
@@ -18,7 +18,7 @@ app.get("/client.js", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  res.sendFile(__dirname + "/public/index.html");
 });
 
 app.post("/decode", async (req, res) => {
@@ -26,20 +26,27 @@ app.post("/decode", async (req, res) => {
     return res.status(400).send("No file uploaded.");
   }
   const imgPath = req.files.image.tempFilePath;
-  const sharpImg = await sharp(imgPath).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-  const code = jsQR(Uint8ClampedArray.from(sharpImg.data), sharpImg.info.width, sharpImg.info.height);
+  const sharpImg = await sharp(imgPath)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const code = jsQR(
+    Uint8ClampedArray.from(sharpImg.data),
+    sharpImg.info.width,
+    sharpImg.info.height
+  );
   if (code) {
-    res.json({decodedData:code.data});
-  }else{
-    return res.status(500).send('Error decoding QR code.');
+    res.json({ decodedData: code.data });
+  } else {
+    return res.status(500).send("Error decoding QR code.");
   }
 });
 
-app.get("/gen",async(req,res)=>{
+app.get("/gen", async (req, res) => {
   QRCode.toDataURL(req.query.value, function (err, url) {
     res.send(url);
-  })
-})
+  });
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
