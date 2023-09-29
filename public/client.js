@@ -22,7 +22,7 @@ decodeButton.addEventListener("click", () => {
     })
     .catch((error) => {
       console.error(error);
-      decodedData.textContent = "Error decoding QR code.";
+      decodedData.textContent = "Error decoding QR code. " + error;
     });
 });
 
