@@ -3,8 +3,9 @@ const fileUpload = require("express-fileupload");
 const sharp = require("sharp");
 const jsQR = require("jsqr");
 const app = express();
+const cors = require("cors");
 const port = 3000;
-var QRCode = require("qrcode");
+const QRCode = require("qrcode");
 
 app.use(
   fileUpload({
@@ -12,6 +13,11 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
+
+const corsOptions = {
+  origin: "https://file.ceyraud.com", // Replace with the actual URL of 'file.ceyraud.com'
+};
+app.use(cors(corsOptions));
 
 app.get("/client.js", (req, res) => {
   res.sendFile(__dirname + "/public/client.js");
