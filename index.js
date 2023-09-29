@@ -14,9 +14,19 @@ app.use(
   })
 );
 
+// Allow specific origins
+const allowedOrigins = ["http://always.ceyraud.com", "http://file.ceyraud.com"];
+
 const corsOptions = {
-  origin: "https://always.ceyraud.com/", // Replace with the actual URL of 'file.ceyraud.com'
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
 };
+
 app.use(cors(corsOptions));
 
 app.get("/client.js", (req, res) => {
