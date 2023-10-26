@@ -1,5 +1,6 @@
 # web-qrcode
-A simple server side QrCode detection service
+A simple server side QrCode maker and detection service
+you can see it at https://qr.ceyraud.com
 
 ## TODO
 
